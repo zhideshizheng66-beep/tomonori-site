@@ -193,6 +193,40 @@
     }
     .btn-outline:hover { background: var(--teal); color: #fff; transform: translateY(-2px); }
 
+    /* ── BUTTON ANIMATIONS ── */
+
+    /* Ripple */
+    .btn { position: relative; overflow: hidden; }
+    .ripple {
+      position: absolute; border-radius: 50%;
+      transform: scale(0); animation: ripple-expand .55s ease-out forwards;
+      pointer-events: none;
+    }
+    .btn-primary .ripple { background: rgba(255,255,255,.35); }
+    .btn-outline  .ripple { background: rgba(61,122,138,.2); }
+    @keyframes ripple-expand {
+      to { transform: scale(4); opacity: 0; }
+    }
+
+    /* Particle */
+    .particle {
+      position: fixed; pointer-events: none; z-index: 9999;
+      font-size: 1.1rem; user-select: none;
+      animation: particle-fly var(--dur, .9s) var(--ease) forwards;
+    }
+    @keyframes particle-fly {
+      0%   { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 1; }
+      100% { transform: translate(var(--tx,0px), var(--ty,-80px)) scale(0) rotate(var(--rot,30deg)); opacity: 0; }
+    }
+
+    /* Button success bounce */
+    @keyframes btn-bounce {
+      0%,100% { transform: scale(1); }
+      30%      { transform: scale(1.08); }
+      60%      { transform: scale(.96); }
+    }
+    .btn.bounce { animation: btn-bounce .4s var(--ease); }
+
     /* ── SECTION BASE ── */
     section { padding: 7rem 6%; }
     .section-label {
@@ -575,7 +609,56 @@
 </footer>
 
 <script>
-  // Scroll progress bar
+  // ── Button click animations ──
+  const PARTICLES_PRIMARY = ['氣','✨','🌊','💫','🌀','⭐','🌟'];
+  const PARTICLES_OUTLINE  = ['📖','✍️','💡','🌿','🍃'];
+
+  function spawnParticles(x, y, set) {
+    const count = 10;
+    for (let i = 0; i < count; i++) {
+      const el = document.createElement('span');
+      el.className = 'particle';
+      el.textContent = set[Math.floor(Math.random() * set.length)];
+      const angle = (Math.PI * 2 / count) * i + (Math.random() - .5) * .6;
+      const dist  = 60 + Math.random() * 60;
+      el.style.cssText = `
+        left:${x}px; top:${y}px;
+        --tx:${Math.cos(angle) * dist}px;
+        --ty:${Math.sin(angle) * dist - 60}px;
+        --rot:${(Math.random() - .5) * 120}deg;
+        --dur:${.7 + Math.random() * .5}s;
+        margin-left:-0.5em; margin-top:-0.5em;
+      `;
+      document.body.appendChild(el);
+      el.addEventListener('animationend', () => el.remove());
+    }
+  }
+
+  function addRipple(btn, e) {
+    const rect = btn.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height) * 2;
+    const x = e.clientX - rect.left - size / 2;
+    const y = e.clientY - rect.top  - size / 2;
+    const ripple = document.createElement('span');
+    ripple.className = 'ripple';
+    ripple.style.cssText = `width:${size}px;height:${size}px;left:${x}px;top:${y}px;`;
+    btn.appendChild(ripple);
+    ripple.addEventListener('animationend', () => ripple.remove());
+  }
+
+  document.querySelectorAll('.btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      addRipple(this, e);
+      this.classList.remove('bounce');
+      void this.offsetWidth; // reflow
+      this.classList.add('bounce');
+      this.addEventListener('animationend', () => this.classList.remove('bounce'), {once:true});
+      const isPrimary = this.classList.contains('btn-primary');
+      spawnParticles(e.clientX, e.clientY, isPrimary ? PARTICLES_PRIMARY : PARTICLES_OUTLINE);
+    });
+  });
+
+  // ── Scroll progress bar
   const progress = document.getElementById('progress');
   const nav = document.getElementById('nav');
   window.addEventListener('scroll', () => {
