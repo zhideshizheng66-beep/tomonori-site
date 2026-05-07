@@ -530,23 +530,79 @@
     .breath-close:hover { color: var(--teal-l); }
 
     /* ── RESPONSIVE ── */
-    @media (max-width: 900px) {
-      .about-inner { grid-template-columns: 1fr; gap: 3.5rem; }
-      .about-visual-wrap { position: static; }
-      .about-visual { aspect-ratio: 3/2; max-height: 300px; }
-      .services-grid { grid-template-columns: 1fr; gap: 2px; }
-      .contact-grid { grid-template-columns: 1fr; }
-      .interests-grid { grid-template-columns: 1fr; gap: 2.4rem; }
-    }
-    @media (max-width: 600px) {
-      section { padding: 5rem 5%; }
-      .hero { padding: 7rem 5% 5rem; }
-      .hero h1 { font-size: clamp(2.2rem, 8vw, 3rem); }
+
+    /* Tablet: 768px — グリッド解除・ハンバーガー表示 */
+    @media (max-width: 768px) {
+      nav { padding: 1.4rem 5%; }
+      nav.scrolled { padding: .9rem 5%; }
       .nav-links { display: none; }
       .hamburger { display: flex; }
       .mobile-nav { display: flex; }
+      .about-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .about-visual-wrap { position: static; }
+      .about-visual { aspect-ratio: 16/9; max-height: 260px; }
+      .services-grid { grid-template-columns: 1fr; gap: 2px; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .interests-grid { grid-template-columns: 1fr; gap: 2rem; }
+    }
+
+    /* Mobile: 600px — レイアウト・余白・タッチ最適化 */
+    @media (max-width: 600px) {
+      section { padding: 4.5rem 5%; }
+      .hero { padding: 6.5rem 5% 4.5rem; }
+
+      /* Hero */
+      .hero-eyebrow { flex-wrap: wrap; gap: .6rem; }
+      .hero-eyebrow-line { display: none; }
+      .hero-eyebrow span { font-size: .62rem; letter-spacing: .16em; }
+      .hero-ja { font-size: .88rem; letter-spacing: .06em; }
+      .hero-actions { flex-direction: column; align-items: center; }
+      .hero-actions .btn { width: 100%; max-width: 280px; text-align: center; }
+
+      /* About */
+      .about-visual { aspect-ratio: 4/3; max-height: 220px; }
+      .about-name { font-size: 2.2rem; }
+
+      /* Services */
       .services-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
-      #breath-widget { bottom: 1.2rem; right: 1.2rem; }
+      .svc-card { padding: 2.4rem 1.6rem 3rem; }
+
+      /* Philosophy — 引用符はみ出し防止 */
+      .philosophy { overflow: hidden; }
+      .philosophy-quote { font-size: clamp(1.25rem, 4.5vw, 1.75rem); padding: 1.6rem .4rem; }
+      .philosophy-quote::before { font-size: 3rem; top: .8rem; left: 0; }
+      .philosophy-quote::after  { font-size: 3rem; bottom: -.6rem; right: 0; }
+
+      /* Contact */
+      .contact-card { padding: 2rem 1.6rem; }
+      .contact-email { font-size: .88rem; word-break: break-all; }
+
+      /* Interests */
+      .interests-note { padding: 1.4rem 1.4rem; font-size: .86rem; }
+
+      /* Quiz — ボタン縦並び・タッチしやすく */
+      .quiz-choices { flex-direction: column; align-items: stretch; }
+      .quiz-btn { width: 100%; padding: 1rem 1.4rem; min-height: 48px; }
+
+      /* Mobile nav */
+      .mobile-nav { gap: 2rem; }
+      .mobile-nav a { font-size: 1.6rem; }
+
+      /* Breath widget */
+      #breath-widget { bottom: 1rem; right: 1rem; }
+      #breath-toggle { width: 44px; height: 44px; font-size: .5rem; }
+      #breath-panel { min-width: 180px; padding: 1.6rem 1.4rem; }
+    }
+
+    /* Very small: 380px — 文字サイズ微調整 */
+    @media (max-width: 380px) {
+      nav { padding: 1.2rem 4%; }
+      section { padding: 4rem 4%; }
+      .hero { padding: 6rem 4% 4rem; }
+      .hero h1 { font-size: 1.95rem; }
+      .hero-eyebrow span { letter-spacing: .1em; }
+      .about-name { font-size: 1.9rem; }
+      .btn { padding: .85rem 1.8rem; font-size: .74rem; }
     }
   </style>
 </head>
